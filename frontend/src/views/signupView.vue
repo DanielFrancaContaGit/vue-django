@@ -7,8 +7,7 @@ const password: Ref<string> = ref('')
 
 const url: URL = new URL('http://127.0.0.1:8000/auth/users/')
 
-function submitForm(e: Event) {
-    e.preventDefault()
+function submitForm() {
     const res: Ref = ref(null)
     const body = new FormData()
 
@@ -24,15 +23,14 @@ function submitForm(e: Event) {
         console.log(request.ok)
         if (request.ok) {
             res.value = request.json()
-            return router.back()
+            router.push({ name: 'home' })
         } else {
             console.log(request)
-            return request.json()
+            alert('Usuario ou senha inadequado')
         }
     })
-    .then((data) => {
-        console.log(data);
-    })
+    username.value = ''
+    password.value = ''
 }
 
 </script>
@@ -42,7 +40,7 @@ function submitForm(e: Event) {
         <h1 class="text-3xl font-bold underline">Signup View </h1>
 
 
-        <form v-on:submit="submitForm" class="flex flex-col justify-center items-center my-5">
+        <form v-on:submit.prevent="submitForm" class="flex flex-col justify-center items-center my-5">
             <input type="text" v-model="username" placeholder="Username" class="input input-bordered w-full max-w-xs">
             <input type="password" v-model="password" placeholder="Password" class="input input-bordered w-full max-w-xs">
             <button type="submit" class="btn btn-wide mt-3">Signup</button>
