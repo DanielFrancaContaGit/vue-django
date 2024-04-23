@@ -1,28 +1,34 @@
 <script setup lang="ts">
 import { ref, type  Ref } from 'vue';
 import router from '@/router';
+import { useAuthenticationStore } from '../stores/authentication.ts';
 
 const username: Ref<string> = ref('')
 const password: Ref<string> = ref('')
 
+const auth = useAuthenticationStore()
+
 const url: URL = new URL('http://127.0.0.1:8000/auth/token/login/')
 
 function submitForm() {
-    const res = ref(null)
     const body = new FormData()
+    const userAuth = useAuthenticationStore()
 
-    body.set('username', username.value)
+    body.set('username', username.value) 
     body.set('password', password.value)
 
-    fetch(url, {
+   fetch(url, {
         method: 'POST',
         body,
     })
-    .then((request) => {
-      res.value = request.json()
-      return router.push({ name: 'list' });
+    .then((request) => request.json())
+    .then((json) => {
+      console.log(json)
+      userAuth.setToken(json.auth_token)
+      router.push({ name: 'list' })
     })
-   }
+
+}
 
 </script>
 <template>

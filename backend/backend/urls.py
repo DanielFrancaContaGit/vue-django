@@ -15,15 +15,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.contrib.auth.views import csrf_protect
 from django.urls import path, include
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import routers, serializers, viewsets, views, response, status, permissions, generics
-from rest_framework.urls import views as v
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
+from rest_framework import (
+    serializers,
+    generics,
 )
 
 
@@ -31,24 +27,19 @@ from rest_framework_simplejwt.views import (
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['is_superuser', 'is_staff', 'is_active', 'username', 'id']
+        fields = ["is_superuser", "is_staff", "is_active", "username", "id"]
 
 
 class UserViewSet(generics.ListAPIView):
     # permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all().order_by('id').values()
+    queryset = User.objects.all().order_by("id").values()
     serializer_class = UserSerializer
 
 
 urlpatterns = [
     path("", include("home.urls", namespace="home")),
-    # path("api/users/", UserViewSet.as_view(), name='api'),
-    # # path('api/', include(router.urls)),
-    # path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path("api/users/", UserViewSet.as_view(), name="api"),
     path("admin/", admin.site.urls),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
-    
+    path("auth/", include("djoser.urls")),
+    path("auth/", include("djoser.urls.authtoken")),
 ]

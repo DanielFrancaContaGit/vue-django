@@ -1,8 +1,10 @@
 <script setup lang='ts'>
-import { useFetch } from '../functions/fetch'
+import { useFetch } from '../functions/fetch';
 import { ref, type Ref } from "vue";
+import { useAuthenticationStore } from '../stores/authentication.ts';
 
 interface User {
+    id: number;
     username: string;
     is_staff: boolean;
     is_active: boolean;
@@ -10,29 +12,33 @@ interface User {
     id: number;
 }
 
-const url: URL = new URL('http://localhost:8000/api/users/')
+const url: URL = new URL('http://localhost:8000/auth/users/me')
 
 const userList: Ref = useFetch(url)
 
 const res: Ref<Array<User>> = ref(userList)
 
+const auth = useAuthenticationStore()
+
 </script>
 
 <template>
-    <sectin>
-        <h1 class="text-3xl font-bold underline">Linsta de usuarios</h1>
+    <section class="flex flex-col justify-center items-center my-20">
         
-        <li class="my-8" v-for="user in res">
-            <ul>Username: {{ user.username }}</ul>
-            <ul>is_staff: {{ user.is_staff }}</ul>
-            <ul>Active: {{ user.is_active }}</ul>
-            <ul>Superuser: {{ user.is_superuser }}</ul>
-        </li>
+        <h1 class="text-3xl font-bold underline">Seja bem vindo {{ res.username }}</h1>
+        {{ auth.isAuthenticated }}
+
+        <ul v-if="res.username" class="my-10">
+          <p class="text-2xl">Detalhes do usuario</p>
+          <p>nome: {{ res.username }}</p>
+          <p>email: {{ res.email }}</p>
+          <p>id: {{ res.id }}</p>
+        </ul>
 
         <nav class="flex justify-between w-60 mt-4">
             <RouterLink class="btn btn-outline" to="/">Home</RouterLink>
             <RouterLink class="btn btn-outline" to="/signup">Signup</RouterLink>
             <RouterLink class="btn btn-outline" to="/list">List</RouterLink>
         </nav>
-    </sectin>
+    </section>
 </template>

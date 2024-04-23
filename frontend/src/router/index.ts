@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthenticationStore } from '@/stores/authentication'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +20,16 @@ const router = createRouter({
       name: 'list',
       component: () => import('../views/ListView.vue')
     }
-  ]
+  ],
+
+})
+
+router.beforeEach((to) => {
+  const auth = useAuthenticationStore()
+
+  if (to.name !== "home" && to.name !== "signup" && !auth.isAuthenticated) {
+    return { name: 'home' }
+  }
 })
 
 export default router
