@@ -15,7 +15,7 @@ const url: URL = new URL('http://localhost:8000/auth/users/me')
 
 const userList: Ref = useFetch(url)
 
-const res = ref(userList)
+const res: Ref<User | null> = ref(userList)
 
 </script>
 
