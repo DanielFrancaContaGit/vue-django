@@ -25,7 +25,6 @@ function submitForm() {
             res.value = request.json()
             router.push({ name: 'home' })
         } else {
-            console.log(request)
             alert('Usuario ou senha inadequado')
         }
     })

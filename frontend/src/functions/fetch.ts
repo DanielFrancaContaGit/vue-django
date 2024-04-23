@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { useAuthenticationStore } from '@/stores/authentication'
 
 export function useFetch(url: URL,) {
-  const res = ref(null)
+  const res = ref('')
   const header = new Headers()
   const auth = useAuthenticationStore()
 
@@ -17,9 +17,8 @@ export function useFetch(url: URL,) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(auth.token)
-      console.log(data);
       res.value = data
     })
+
   return res
 }

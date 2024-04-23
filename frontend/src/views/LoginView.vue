@@ -6,7 +6,6 @@ import { useAuthenticationStore } from '../stores/authentication.ts';
 const username: Ref<string> = ref('')
 const password: Ref<string> = ref('')
 
-const auth = useAuthenticationStore()
 
 const url: URL = new URL('http://127.0.0.1:8000/auth/token/login/')
 
@@ -23,7 +22,6 @@ function submitForm() {
     })
     .then((request) => request.json())
     .then((json) => {
-      console.log(json)
       userAuth.setToken(json.auth_token)
       router.push({ name: 'list' })
     })

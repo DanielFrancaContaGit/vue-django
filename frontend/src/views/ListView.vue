@@ -1,7 +1,6 @@
 <script setup lang='ts'>
 import { useFetch } from '../functions/fetch';
 import { ref, type Ref } from "vue";
-import { useAuthenticationStore } from '../stores/authentication.ts';
 
 interface User {
     id: number;
@@ -16,17 +15,13 @@ const url: URL = new URL('http://localhost:8000/auth/users/me')
 
 const userList: Ref = useFetch(url)
 
-const res: Ref<Array<User>> = ref(userList)
-
-const auth = useAuthenticationStore()
+const res = ref(userList)
 
 </script>
 
 <template>
     <section class="flex flex-col justify-center items-center my-20">
-        
         <h1 class="text-3xl font-bold underline">Seja bem vindo {{ res.username }}</h1>
-        {{ auth.isAuthenticated }}
 
         <ul v-if="res.username" class="my-10">
           <p class="text-2xl">Detalhes do usuario</p>
